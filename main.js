@@ -5,31 +5,65 @@ var inquirer = require('inquirer');
 
 // Required files to run this game
 var game = require('./game.js');  			// Contains the method that randomly selects a word for the player to guess
-var Letter = require('./letter.js');    	// Contains the method that controls whether or not a letter appears as a "___" or as itself on-screen
 var Word = require('./word.js');  			// Contains all of the methods that check the letters guessed vs the random word selected
 
 // Initialize global variables
 var wordToGuess = game.randomWord;  						// Random word selected
-var letterGuess = "R";										// Current letter the player guessed
-var displayArray = new Word(wordToGuess, letterGuess);	// Stores the player's current display of letters and "___"
-//var lettersGuessed = 0;										// Counts the number of correct letter guesses
-var letterArray = [];  										// Stores all the letters guessed by the player so far
-var guessesLeft = 7;  										// 7 wrong letter guesses before the game ends
-var wonOrLost = false;										// Game is not over yet
-//var numWins = 0;											// Counts the number of games won so far
+var letterGuess = "";										// Current letter the player guessed
+var numGuessed = 0;											// Counts the number of correct letter guesses
+var guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
+var displayArray = new Word(wordToGuess, letterGuess);		// Stores the player's current display of letters and "___"
+var wordLength = displayArray.numLetters;  					// Holds the number of letters in the random word
+var wonOrLost = "";											// Player has not won or lost yet
 
 
 console.log(wordToGuess);
-
-
-
-
-
-
-
 
 
 // *** DISPLAY ***
 console.log("Welcome to Hangman: The Game");
 console.log("Your randomly selected word has been randomly selected:");
 console.log(displayArray.display);
+
+
+// *** PLAYING THE GAME *** //
+function pickALetter() {
+	inquirer.prompt([{
+			name: "letterPick",
+			message: "What letter do you pick?",
+			filter: function(input) {
+			    return input.toUpperCase();
+			}			
+	}]).then(function(answer) {
+		letterGuess = answer.letterPick;
+//		displayArray = checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
+		console.log(guessesLeft);
+		console.log(wordLength);
+		if (numGuessed == wordLength) {
+			wonOrLost = "won";  // Player guessed the word and won!
+			gameOver();
+		} else if (guessesLeft == 0) {
+			wonOrLost = "lost";  // Player ran out of guesses and lost!
+			gameOver();
+		}
+
+		// Play on!
+		pickALetter();
+	});
+};
+
+// *** THE GAME IS FINALLY OVER *** //
+function gameOver() {
+	console.log("=======================");
+	console.log("GAME OVER!");
+	console.log("=======================");
+	if (wonOrLost == "won") {
+		console.log("Congratulations, you won and saved the day!");
+	} else if (wonOrLost == "lost") {
+		console.log("Oh noes, you were so bad at guessing that your man died!");
+	}
+	return;
+};
+
+// *** START THE GAME *** //
+pickALetter();
