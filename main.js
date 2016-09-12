@@ -12,13 +12,17 @@ var wordToGuess = game.randomWord;  						// Random word selected
 var letterGuess = "";										// Current letter the player guessed
 //var numGuessed = 0;											// Counts the number of correct letter guesses
 //var guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
-var displayObj = new Word(wordToGuess, letterGuess);		// Stores the player's current display of letters and "___"
+
+var displayObj = new Word(wordToGuess, letterGuess);		// Creates a new Word obj 
 var wordLength = displayObj.numLetters;  					// Holds the number of letters in the random word
-var wordDisplay = displayObj.display;						// Holds the game display of the random word (letters and "___")
+var wordDisplay = displayObj.display;						// Holds the player's current display of letters and "___"
+var numGuessed = displayObj.numGuessed;						// Counts the number of correct letter guesses
+var guessesLeft =  displayObj.guessesLeft;					// 10 wrong letter guesses before the game ends
+
 var wonOrLost = "";											// Player has not won or lost yet
 
 
-console.log(wordToGuess);
+console.log(wordToGuess)
 
 
 // *** DISPLAY ***
@@ -37,19 +41,22 @@ function pickALetter() {
 			}			
 	}]).then(function(answer) {
 		letterGuess = answer.letterPick;
-		console.log("wordDisplay", wordDisplay)
-		wordDisplay = Word.prototype.checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
-//		console.log("thisWord in main", thisWord)
-		console.log("guessesLeft", guessesLeft)
-		console.log("wordLength", wordLength)
+
+		//wordDisplay = displayObj.checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
+		wordDisplay = displayObj.checkWord(wordToGuess, letterGuess);
+
+		console.log("guessesLeft", displayObj.guessesLeft)
 		console.log(wordDisplay);
-		console.log("numGuessed", numGuessed)
-		if (numGuessed == wordLength) {
+		console.log("numGuessed", displayObj.numGuessed)
+
+		if (displayObj.numGuessed == wordLength) {
 			wonOrLost = "won";  // Player guessed the word and won!
 			gameOver();
-		} else if (guessesLeft == 0) {
+			return;
+		} else if (displayObj.guessesLeft == 0) {
 			wonOrLost = "lost";  // Player ran out of guesses and lost!
 			gameOver();
+			return;
 		}
 
 		// Play on!
