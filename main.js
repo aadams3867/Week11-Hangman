@@ -10,8 +10,6 @@ var Word = require('./word.js');  			// Contains all of the methods that check t
 // Initialize global variables
 var wordToGuess = game.randomWord;  						// Random word selected
 var letterGuess = "";										// Current letter the player guessed
-//var numGuessed = 0;											// Counts the number of correct letter guesses
-//var guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
 
 var displayObj = new Word(wordToGuess, letterGuess);		// Creates a new Word obj 
 var wordLength = displayObj.numLetters;  					// Holds the number of letters in the random word
@@ -22,11 +20,12 @@ var guessesLeft =  displayObj.guessesLeft;					// 10 wrong letter guesses before
 var wonOrLost = "";											// Player has not won or lost yet
 
 
-console.log(wordToGuess)
+//console.log(wordToGuess)
 
 
 // *** DISPLAY ***
 console.log("Welcome to Hangman: The Game");
+console.log("You have 10 tries to guess the FRUIT, or your man dies!");
 console.log("Your randomly selected word has been randomly selected:");
 console.log(wordDisplay);
 
@@ -42,12 +41,10 @@ function pickALetter() {
 	}]).then(function(answer) {
 		letterGuess = answer.letterPick;
 
-		//wordDisplay = displayObj.checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
-		wordDisplay = displayObj.checkWord(wordToGuess, letterGuess);
-
-		console.log("guessesLeft", displayObj.guessesLeft)
+		wordDisplay = displayObj.checkWord(wordToGuess, letterGuess, wordDisplay);
 		console.log(wordDisplay);
-		console.log("numGuessed", displayObj.numGuessed)
+		//console.log("guessesLeft", displayObj.guessesLeft);
+		//console.log("numGuessed", displayObj.numGuessed);
 
 		if (displayObj.numGuessed == wordLength) {
 			wonOrLost = "won";  // Player guessed the word and won!

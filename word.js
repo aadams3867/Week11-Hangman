@@ -11,8 +11,8 @@ var Word = function(word, letter){
 	this.numLetters = wordArray.length;
 
 	// Initialize variables
-	this.numGuessed = 0;											// Counts the number of correct letter guesses
-	this.guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
+	this.numGuessed = 0;					// Counts the number of correct letter guesses
+	this.guessesLeft = 10;  				// 10 wrong letter guesses before the game ends
 
 	// Create a Letter object
 	var letterOrBlank = new Letter(letter);
@@ -22,48 +22,48 @@ var Word = function(word, letter){
 	}
 
 	// Convert the array of characters back into a string
-	this.display = wordArray.join(" ");
+	this.display = wordArray.join("");
 
 
-
-//	this.checkWord = function(word, letter, numGuessed, guessesLeft){
-	this.checkWord = function(word, letter){
+	this.checkWord = function(word, letter, wordDisplay){
 		// Convert the random word into an array of characters
-		var wordArray = word.split("");
-
-		// Convert the random word into an array of characters
-		var displayArray = word.split("");
+		wordArray = word.split("");
 
 		// Create a Letter object
 		var letterOrBlank = new Letter(letter);
 
+		// Convert the random word into an array of characters
+		this.displayArray = wordDisplay.split("");
+
+		// Initialize a local flag variable
+		var correctGuess = false;
+
 		// Checks whether the player's letter pick appears in the random word
 		for (var i=0; i<wordArray.length; i++) {
-	//		if (wordArray[i] === "___") {  // if that letter hasn't been guessed yet, compare
+
+			if (this.displayArray[i] === "_") {  // if that letter hasn't been guessed yet, compare
 				if (wordArray[i] === letter) {
-					console.log("It's in there!")
-					wordArray[i] = letterOrBlank.letter;
+					this.displayArray[i] = letterOrBlank.letter;
 					this.numGuessed++;
-					console.log("numGuessed incremented!", this.numGuessed)
-					this.guessesLeft++;  // +1 here to counteract automatic -1 below
+					correctGuess = true;
 				} else {
-					wordArray[i] = letterOrBlank.blank;
-					console.log("No go!")
+					this.displayArray[i] = letterOrBlank.blank;
 				}
-	//		}
+			}
+
 		}
 
 		// Convert the array of characters back into a string
-		console.log("This", this)
-	//	console.log("thisWord", thisWord)
-		this.display = wordArray.join(" ");
-		console.log("This.display", this.display)
-		this.guessesLeft--;
+		this.display = this.displayArray.join("");
+
+		if (correctGuess == false) {  // Player picked a letter that was NOT in the word
+			this.guessesLeft--;
+		}
+		
 		return this.display;
 	};
 
 };
-
 
 
 module.exports = Word;
