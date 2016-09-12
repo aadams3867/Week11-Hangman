@@ -10,10 +10,11 @@ var Word = require('./word.js');  			// Contains all of the methods that check t
 // Initialize global variables
 var wordToGuess = game.randomWord;  						// Random word selected
 var letterGuess = "";										// Current letter the player guessed
-var numGuessed = 0;											// Counts the number of correct letter guesses
-var guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
-var displayArray = new Word(wordToGuess, letterGuess);		// Stores the player's current display of letters and "___"
-var wordLength = displayArray.numLetters;  					// Holds the number of letters in the random word
+//var numGuessed = 0;											// Counts the number of correct letter guesses
+//var guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
+var displayObj = new Word(wordToGuess, letterGuess);		// Stores the player's current display of letters and "___"
+var wordLength = displayObj.numLetters;  					// Holds the number of letters in the random word
+var wordDisplay = displayObj.display;						// Holds the game display of the random word (letters and "___")
 var wonOrLost = "";											// Player has not won or lost yet
 
 
@@ -23,7 +24,7 @@ console.log(wordToGuess);
 // *** DISPLAY ***
 console.log("Welcome to Hangman: The Game");
 console.log("Your randomly selected word has been randomly selected:");
-console.log(displayArray.display);
+console.log(wordDisplay);
 
 
 // *** PLAYING THE GAME *** //
@@ -36,9 +37,13 @@ function pickALetter() {
 			}			
 	}]).then(function(answer) {
 		letterGuess = answer.letterPick;
-//		displayArray = checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
-		console.log(guessesLeft);
-		console.log(wordLength);
+		console.log("wordDisplay", wordDisplay)
+		wordDisplay = Word.prototype.checkWord(wordToGuess, letterGuess, numGuessed, guessesLeft);
+//		console.log("thisWord in main", thisWord)
+		console.log("guessesLeft", guessesLeft)
+		console.log("wordLength", wordLength)
+		console.log(wordDisplay);
+		console.log("numGuessed", numGuessed)
 		if (numGuessed == wordLength) {
 			wonOrLost = "won";  // Player guessed the word and won!
 			gameOver();

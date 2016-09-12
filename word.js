@@ -10,6 +10,10 @@ var Word = function(word, letter){
 	// Save the number of letters in the random word
 	this.numLetters = wordArray.length;
 
+	// Initialize variables
+//	this.numGuessed = 0;											// Counts the number of correct letter guesses
+//	this.guessesLeft = 10;  										// 10 wrong letter guesses before the game ends
+
 	// Create a Letter object
 	var letterOrBlank = new Letter(letter);
 
@@ -23,28 +27,40 @@ var Word = function(word, letter){
 
 
 Word.prototype.checkWord = function(word, letter, numGuessed, guessesLeft){
+	// Scope
+//	var thisWord = this;
 	// Convert the random word into an array of characters
 	var wordArray = word.split("");
+
+	// Convert the random word into an array of characters
+	var displayArray = word.split("");
 
 	// Create a Letter object
 	var letterOrBlank = new Letter(letter);
 
 	// Checks whether the player's letter pick appears in the random word
 	for (var i=0; i<wordArray.length; i++) {
-		if (wordArray[i] === letter) {
-			wordArray[i] = letterOrBlank.letter;
-			numGuessed++;
-			guessesLeft++;  // +1 here to counteract automatic -1 below
-		} else {
-			wordArray[i] = letterOrBlank.blank;
-
-		}
+//		if (wordArray[i] === "___") {  // if that letter hasn't been guessed yet, compare
+			if (wordArray[i] === letter) {
+				console.log("It's in there!")
+				wordArray[i] = letterOrBlank.letter;
+				this.numGuessed++;
+				console.log("numGuessed incremented!", this.numGuessed)
+				guessesLeft++;  // +1 here to counteract automatic -1 below
+			} else {
+				wordArray[i] = letterOrBlank.blank;
+				console.log("No go!")
+			}
+//		}
 	}
 
 	// Convert the array of characters back into a string
+	console.log("This", this)
+//	console.log("thisWord", thisWord)
 	this.display = wordArray.join(" ");
-
+	console.log("This.display", this.display)
 	guessesLeft--;
+	return this.display;
 };
 
 module.exports = Word;
